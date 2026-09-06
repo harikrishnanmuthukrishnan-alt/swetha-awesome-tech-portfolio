@@ -1,11 +1,17 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate } from "@/lib/router";
 import { useAuth } from "@/lib/auth-context";
 import { Eye, EyeOff, Lock, Mail, Loader2, AlertCircle, ArrowRight } from "lucide-react";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, session, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (!authLoading && session) {
+      navigate("/admin/dashboard");
+    }
+  }, [session, authLoading, navigate]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
